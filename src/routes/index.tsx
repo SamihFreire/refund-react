@@ -12,7 +12,7 @@ const isLoading = false;
 
 const session = {
     user: {
-        role: "employee",
+        role: "",
     },
 }
 
@@ -36,6 +36,7 @@ export function Routes() {
 
     return (
         <BrowserRouter>
+            {/* Rederizamos o método Route criado que retorna o componente por perfil de usuário passado */}
             <Route />
         </BrowserRouter>
     )
