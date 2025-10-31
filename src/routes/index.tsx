@@ -2,21 +2,19 @@ import { BrowserRouter } from "react-router"
 
 import { Loading } from "../components/Loading"
 
+// Importando os dados do contexto
+import { useAuth } from "../hooks/useAuth"
+
 import { AuthRoutes } from "./AuthRoutes"
 import { ManagerRoutes } from "./ManagerRoutes"
 import { EmployeeRoutes } from "./EmployeeRoutes"
 
-const isLoading = false;
-
 // const session = undefined;
 
-const session = {
-    user: {
-        role: "",
-    },
-}
-
 export function Routes() {
+    // Usando os dados do contexto
+    const { session, isLoading } = useAuth();
+
     function Route() {
         switch (session?.user.role) {
             case "employee":

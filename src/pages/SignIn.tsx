@@ -4,6 +4,7 @@ import { z, ZodError } from "zod"
 import { AxiosError } from "axios"
 
 import { api } from "../services/api"
+import { useAuth } from "../hooks/useAuth"
 
 import { Input } from "../components/Input"
 import { Button } from "../components/Button"
@@ -36,6 +37,7 @@ export function SignIn() {
 
     const [ state, formAction, isLoading ] = useActionState(signIn, null);
 
+    const auth = useAuth();
 
     async function signIn(prevState: any, formData: FormData) {
         // Novo recurso do react 19 onde podemos recuperar os dados do formulario sem criar estados
@@ -55,8 +57,8 @@ export function SignIn() {
                 password: formData.get("password"),
             })
 
-            const response = await api.post("/sessions", data)
-            console.log(response.data);
+            const response = await api.post("/sessions", data) // Obtendo a session na API
+            auth.save(response.data); // Salvando os dados da session no AuthContext
             
         } catch (error) {
             console.log(error);
