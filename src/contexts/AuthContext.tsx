@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-
 import { createContext, type ReactNode } from "react";
+import { api } from "../services/api";
 
 type AuthContext = {
     isLoading: boolean
@@ -23,6 +23,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // No local storage guardamos como texto os valores
         localStorage.setItem(`${LOCAL_STORAGE_KEY}:user`, JSON.stringify(data.user)); // Convertendo para string
         localStorage.setItem(`${LOCAL_STORAGE_KEY}:token`, data.token);
+
+        // Adicionando um cabeçalho padrão nas requisições quando usuário loga
+        // Todas as requisições feitas para api o token vai esta anexado ao cabeçalho da requisição
+        api.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
         
         // Guardando o estado da session
         setSession(data);
@@ -45,6 +49,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const token = localStorage.getItem(`${LOCAL_STORAGE_KEY}:token`);
 
         if(token && user) {
+            api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
             setSession({
                 token,
                 user: JSON.parse(user) // Convertendo para objeto
